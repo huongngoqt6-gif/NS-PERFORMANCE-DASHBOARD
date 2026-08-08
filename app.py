@@ -382,16 +382,17 @@ if os.path.exists(file_path):
                     title="% of Network by Segment"
                 )
                 
-                # Gắn nhãn tên segment và % trực tiếp lên mảnh biểu đồ, đồng thời ẩn chú thích bên phải
+                # Gắn nhãn tên segment và % trực tiếp lên mảnh biểu đồ
                 fig.update_traces(
                     pull=[0.05] * len(seg_data),
-                    textinfo='label+percent',  # Hiển thị cả tên segment và %
-                    textposition='inside'      # Đặt nhãn vào bên trong các mảnh
+                    textinfo='label+percent',
+                    textposition='inside'
                 )
                 
-                # Tắt hoàn toàn phần chú thích (legend) bên phía tay phải
+                # Ẩn chú thích và tăng chiều cao biểu đồ lên (ví dụ: 480 pixel)
                 fig.update_layout(
-                    showlegend=False
+                    showlegend=False,
+                    height=520  # Bạn có thể tăng/giảm số này tùy ý (mặc định Streamlit thường nhỏ hơn)
                 )
                 
                 st.plotly_chart(fig, use_container_width=True)
