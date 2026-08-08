@@ -17,7 +17,7 @@ st.markdown('''
     }
     /* Thu hẹp tối đa khoảng trống phía trên cùng của trang */
     .block-container {
-        padding-top: 1rem !important; /* Giảm khoảng đệm phía trên từ mặc định xuống còn rất ít */
+        padding-top: 1rem !important;
         padding-bottom: 2rem !important;
     }
     header[data-testid="stHeader"] {
@@ -33,9 +33,9 @@ st.markdown('''
     /* Tăng kích cỡ chữ tiêu đề chính và chỉnh lề */
     .main-title {
         color: white;
-        font-size: 32px; /* Tăng kích thước chữ lớn hơn */
+        font-size: 32px;
         font-weight: bold;
-        margin-top: -10px; /* Kéo tiêu đề dịch lên trên thêm */
+        margin-top: -10px;
         margin-bottom: 10px;
         text-transform: uppercase;
     }
@@ -99,7 +99,7 @@ st.markdown('''
 </style>
 ''', unsafe_allow_html=True)
 
-def create_metric_card(title, label1, val1, label2, val2, total_label=None, total_val=None):
+def create_metric_card(title, label1, val1, label2=None, val2=None, total_label=None, total_val=None):
     total_html = ""
     if total_val is not None and str(total_val) != "nan" and str(total_val) != "":
         total_html = f"""
@@ -109,6 +109,15 @@ def create_metric_card(title, label1, val1, label2, val2, total_label=None, tota
         </div>
         """
     
+    second_box_html = ""
+    if label2 is not None and val2 is not None and label2 != "":
+        second_box_html = f"""
+            <div class="value-box">
+                <div class="value-label">{label2}</div>
+                <div class="value-number">{val2}</div>
+            </div>
+        """
+
     html_code = f"""
     <div class="metric-card">
         <h4>{title}</h4>
@@ -117,10 +126,7 @@ def create_metric_card(title, label1, val1, label2, val2, total_label=None, tota
                 <div class="value-label">{label1}</div>
                 <div class="value-number">{val1}</div>
             </div>
-            <div class="value-box">
-                <div class="value-label">{label2}</div>
-                <div class="value-number">{val2}</div>
-            </div>
+            {second_box_html}
         </div>
         {total_html}
     </div>
@@ -134,9 +140,9 @@ def load_data(file):
     # HC Sheet
     hc = pd.read_excel(xls, sheet_name='HC', skiprows=3, header=None)
     hc.columns = ['Office', 'Month', 'Approved_HC_MNG', 'Approved_HC_PIC', 'Approved_HC_Total', 
-                  'Actual_HC_MNG', 'Actual_HC_PIC', 'Actual_HC_Total', 
-                  'Required_HC_MNG', 'Required_HC_PIC', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']
-                  
+                 'Actual_HC_MNG', 'Actual_HC_PIC', 'Actual_HC_Total', 
+                 'Required_HC_MNG', 'Required_HC_PIC', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']
+                 
     # Shipment Volume Sheet
     sv = pd.read_excel(xls, sheet_name='Shipment volume', skiprows=3, header=None)
     sv.columns = ['Office', 'Month', 'Active_customer', 'AI', 'AE', 'OILCL', 'OIFCL', 'OELCL', 'OEFCL', 'DI', 'DE', 'DM', 'CE', 'CI', 'HE', 'HI', 'RE', 'RI', 'RD', 'Total']
@@ -178,7 +184,6 @@ def clean_empty_months(df):
 
 st.sidebar.title("NS Dashboard")
 
-# Chỉ định đường dẫn file trực tiếp thay vì upload
 file_path = "NTW DATA FOR DASHBOARD.xlsx"
 
 if os.path.exists(file_path):
@@ -227,9 +232,8 @@ if os.path.exists(file_path):
                 cap_status = hc_df['Capacity_Status'].mode()[0] if not hc_df['Capacity_Status'].empty else ""
                 create_metric_card("Capacity", "%", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", "Status", cap_status)
             with c5:
-                create_metric_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1), "", "")
+                create_metric_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1))
                 
-            c_chart1, c_chart2 = st.columns(2)
             c_chart1, c_chart2 = st.columns(2)
             with c_chart1:
                 hc_trend = hc_df.groupby('Month')[['Required_HC_Total', 'Actual_HC_Total']].mean().reset_index()
@@ -263,9 +267,9 @@ if os.path.exists(file_path):
             st.header("Shipment volume")
             c1, c2 = st.columns(2)
             with c1:
-               create_metric_card("Active Customer", "Avg Active", round(sv_df['Active_customer'].mean(), 1))
+                create_metric_card("Active Customer", "Avg Active", round(sv_df['Active_customer'].mean(), 1))
             with c2:
-               create_metric_card("Shipment Volume", "Avg Total", round(sv_df['Total'].mean(), 1))
+                create_metric_card("Shipment Volume", "Avg Total", round(sv_df['Total'].mean(), 1))
                 
             c_chart1, c_chart2 = st.columns(2)
             with c_chart1:
