@@ -176,7 +176,10 @@ if os.path.exists(file_path):
                 <div class="custom-metric-card">
                     <div class="card-title">Approved HC (Total)</div>
                     <div class="card-value">{round(hc_df['Approved_HC_Total'].mean(), 1)}</div>
-                    <div class="card-sub"><span>MNG: {round(hc_df['Approved_HC_MNG'].mean(), 1)}</span><span>PIC: {round(hc_df['Approved_HC_PIC'].mean(), 1)}</span></div>
+                    <div class="card-sub">
+                        <span><span class="label-part">MNG:</span> <span class="num-part">{round(hc_df['Approved_HC_MNG'].mean(), 1)}</span></span>
+                        <span><span class="label-part">PIC:</span> <span class="num-part">{round(hc_df['Approved_HC_PIC'].mean(), 1)}</span></span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
             with c2:
@@ -184,7 +187,10 @@ if os.path.exists(file_path):
                 <div class="custom-metric-card">
                     <div class="card-title">Actual HC (Total)</div>
                     <div class="card-value">{round(hc_df['Actual_HC_Total'].mean(), 1)}</div>
-                    <div class="card-sub"><span>MNG: {round(hc_df['Actual_HC_MNG'].mean(), 1)}</span><span>PIC: {round(hc_df['Actual_HC_PIC'].mean(), 1)}</span></div>
+                    <div class="card-sub">
+                        <span><span class="label-part">MNG:</span> <span class="num-part">{round(hc_df['Actual_HC_MNG'].mean(), 1)}</span></span>
+                        <span><span class="label-part">PIC:</span> <span class="num-part">{round(hc_df['Actual_HC_PIC'].mean(), 1)}</span></span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
             with c3:
@@ -192,7 +198,10 @@ if os.path.exists(file_path):
                 <div class="custom-metric-card">
                     <div class="card-title">Required HC (Total)</div>
                     <div class="card-value">{round(hc_df['Required_HC_Total'].mean(), 1)}</div>
-                    <div class="card-sub"><span>MNG: {round(hc_df['Required_HC_MNG'].mean(), 1)}</span><span>PIC: {round(hc_df['Required_HC_PIC'].mean(), 1)}</span></div>
+                    <div class="card-sub">
+                        <span><span class="label-part">MNG:</span> <span class="num-part">{round(hc_df['Required_HC_MNG'].mean(), 1)}</span></span>
+                        <span><span class="label-part">PIC:</span> <span class="num-part">{round(hc_df['Required_HC_PIC'].mean(), 1)}</span></span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
             with c4:
@@ -201,7 +210,7 @@ if os.path.exists(file_path):
                 <div class="custom-metric-card">
                     <div class="card-title">Capacity %</div>
                     <div class="card-value">{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%</div>
-                    <div class="card-sub"><span>Status: {cap_status}</span></div>
+                    <div class="card-sub"><span class="label-part">Status: {cap_status}</span></div>
                 </div>
                 """, unsafe_allow_html=True)
             with c5:
@@ -209,7 +218,7 @@ if os.path.exists(file_path):
                 <div class="custom-metric-card">
                     <div class="card-title">Shipment Volume</div>
                     <div class="card-value">{round(sv_df['Total'].mean(), 1)}</div>
-                    <div class="card-sub"><span>Total Avg</span></div>
+                    <div class="card-sub"><span class="label-part">Total Avg</span></div>
                 </div>
                 """, unsafe_allow_html=True)
                 
