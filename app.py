@@ -401,7 +401,18 @@ if os.path.exists(file_path):
                 st.markdown("**BU Allocation Data**")
                 df_bu_display = bu_df.copy()
                 df_bu_display.index = range(1, len(df_bu_display) + 1)
-                st.dataframe(df_bu_display, use_container_width=True)
+                
+                # Định dạng cột Pct_of_Network sang kiểu hiển thị phần trăm
+                st.dataframe(
+                    df_bu_display, 
+                    use_container_width=True,
+                    column_config={
+                        "Pct_of_Network": st.column_config.NumberColumn(
+                            "Pct_of_Network",
+                            format="%.1f%%"  # Hiển thị 1 chữ số thập phân kèm dấu %
+                        )
+                    }
+                )
                 
             st.subheader("Details by Services")
             t_a, t_c, t_s, t_e = st.tabs(["Core Service (A)", "Ancillary Service (C)", "Supporting Activity (S)", "Exception Handling (E)"])
