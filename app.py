@@ -200,13 +200,13 @@ if os.path.exists(file_path):
                 fig1 = go.Figure()
                 fig1.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Required_HC_Total'], name='Required HC', line=dict(color='gray')))
                 fig1.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Actual_HC_Total'], name='Actual HC', fill='tonexty', line=dict(color='orange')))
-                fig1.update_layout(title="Actual HC vs Required HC", margin=dict(l=0, r=0, t=30, b=0), plot_bgcolor='rgba(0,0,0,0)')
+                fig1.update_layout(title="Actual HC vs Required HC",height=400, margin=dict(l=20, r=100, t=40, b=20), plot_bgcolor='rgba(0,0,0,0)')
                 st.plotly_chart(fig1, use_container_width=True)
                 
             with c_chart2:
                 sv_trend = sv_df.groupby(['Month', 'Office'])['Total'].sum().reset_index()
                 fig2 = px.bar(sv_trend, x='Month', y='Total', color='Office', barmode='group', title="Total Volume Trend by Month & Office")
-                fig2.update_layout(margin=dict(l=0, r=0, t=30, b=0), plot_bgcolor='rgba(0,0,0,0)')
+                fig2.update_layout(height=400,margin=dict(l=20, r=120, t=40, b=20), plot_bgcolor='rgba(0,0,0,0)')
                 st.plotly_chart(fig2, use_container_width=True)
                 
             st.markdown("<div style='color: white; margin-top: 20px; font-style: italic;'>* Ghi chú: 1 FTE tương ứng với 8 tiếng x 95% hiệu suất x 22 ngày trong tháng.</div>", unsafe_allow_html=True)
