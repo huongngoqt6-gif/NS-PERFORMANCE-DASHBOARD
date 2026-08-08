@@ -11,11 +11,15 @@ st.set_page_config(page_title="NS Dashboard", layout="wide")
 # CSS Styling to match requirements
 st.markdown('''
 <style>
-    /* Phủ màu nền cho toàn bộ ứng dụng, kéo dài lên sát mép trên */
+    /* Phủ màu nền cho toàn bộ ứng dụng */
     .stApp {
         background-color: #607D8B !important;
     }
-    /* Ẩn khoảng trắng header mặc định của Streamlit phía trên */
+    /* Thu hẹp tối đa khoảng trống phía trên cùng của trang */
+    .block-container {
+        padding-top: 1rem !important; /* Giảm khoảng đệm phía trên từ mặc định xuống còn rất ít */
+        padding-bottom: 2rem !important;
+    }
     header[data-testid="stHeader"] {
         background-color: rgba(0,0,0,0) !important;
     }
@@ -26,12 +30,13 @@ st.markdown('''
     [data-testid="stSidebar"] * {
         color: white !important;
     }
-    /* Tiêu đề chính của dashboard */
+    /* Tăng kích cỡ chữ tiêu đề chính và chỉnh lề */
     .main-title {
         color: white;
-        font-size: 26px;
+        font-size: 32px; /* Tăng kích thước chữ lớn hơn */
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-top: -10px; /* Kéo tiêu đề dịch lên trên thêm */
+        margin-bottom: 10px;
         text-transform: uppercase;
     }
     /* Cards */
