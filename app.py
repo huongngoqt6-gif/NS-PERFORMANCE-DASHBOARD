@@ -26,37 +26,45 @@ st.markdown('''
     .metric-card {
         background-color: white;
         border-radius: 10px;
-        padding: 15px;
+        padding: 12px 8px; /* Giảm padding ngang một chút để tăng diện tích chứa */
         border: 1px solid #e0e0e0;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
         margin-bottom: 15px;
-        text-align: center; /* Căn giữa toàn bộ text trong card */
+        text-align: center;
+        overflow: hidden; /* Ẩn phần nội dung bị tràn nếu có */
     }
     .metric-card h4 {
         color: #7f8c8d;
         margin-top: 0;
-        font-size: 14px;
+        margin-bottom: 8px;
+        font-size: 13px;
         text-transform: uppercase;
-        text-align: center; /* Căn giữa tiêu đề H4 */
+        text-align: center;
     }
     .metric-card .value-container {
         display: flex;
-        justify-content: center; /* Đưa các giá trị ra giữa */
-        gap: 30px; /* Khoảng cách giữa 2 cột (ví dụ MNG và PIC) */
+        justify-content: space-around; /* Phân bổ đều không gian thay vì dùng gap cố định */
+        align-items: center;
+        width: 100%;
     }
     .metric-card .value-box {
-        text-align: center; /* Căn giữa nội dung từng giá trị */
+        text-align: center;
+        flex: 1; /* Giúp các cột tự động co giãn đều trong card */
+        min-width: 0; /* Quan trọng: Ngăn flexitem bị đẩy tràn viền bởi chữ dài */
+        padding: 0 2px;
     }
     .metric-card .value-label {
         color: #7f8c8d;
-        font-size: 12px;
-        margin-bottom: 5px;
+        font-size: 11px;
+        margin-bottom: 3px;
+        white-space: nowrap; /* Giữ nhãn trên 1 dòng */
     }
     .metric-card .value-number {
         color: #e67e22;
-        font-size: 24px;
+        font-size: 20px; /* Thu nhỏ cỡ chữ một chút (từ 24px xuống 20px) để vừa vặn với từ dài như Overload */
         font-weight: bold;
         margin: 0;
+        word-break: break-word;
     }
     /* Charts container */
     .stPlotlyChart {
