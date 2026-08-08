@@ -353,7 +353,12 @@ if os.path.exists(file_path):
                 with cols[idx]:
                     val = bu_df[bu_df['Segment'] == seg]['Pct_of_Network'].mean()
                     if pd.isna(val): val = 0
-                    st.metric(seg, f"{round(val * 100, 1)}%", "% of Network")
+                    st.markdown(f"""
+                    <div class="custom-metric-card">
+                        <div class="card-title">{seg}</div>
+                        <div class="card-value" style="margin-bottom: 0px;">{round(val * 100, 1)}%</div>
+                    </div>
+                    """, unsafe_allow_html=True)
                     
             c_left, c_right = st.columns(2)
             with c_left:
