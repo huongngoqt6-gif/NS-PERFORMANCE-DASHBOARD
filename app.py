@@ -8,7 +8,7 @@ import os
 # Config page
 st.set_page_config(page_title="NS Dashboard", layout="wide")
 
-# CSS Styling to match requirements
+# CSS Styling để tùy biến st.metric thành các card nền trắng, bo viền, căn giữa, chữ xám, số cam
 st.markdown('''
 <style>
     .stApp {
@@ -35,6 +35,44 @@ st.markdown('''
         margin-bottom: 10px;
         text-transform: uppercase;
     }
+    
+    /* Tùy chỉnh khối chứa metric thành Card nền trắng, bo viền, căn giữa */
+    [data-testid="stMetric"] {
+        background-color: white;
+        border-radius: 10px;
+        border: 1px solid #dcdde1;
+        padding: 15px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+    
+    /* Chỉnh nhãn tiêu đề card (Label) thành màu xám, chữ thường/hoa, căn giữa */
+    [data-testid="stMetric"] label {
+        color: #7f8c8d !important;
+        font-size: 13px !important;
+        text-transform: uppercase;
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    /* Chỉnh giá trị số chính thành màu cam */
+    [data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #e67e22 !important;
+        font-size: 24px !important;
+        font-weight: bold;
+        justify-content: center;
+    }
+    
+    /* Chỉnh phần phụ đề/delta bên dưới thành màu xám */
+    [data-testid="stMetric"] [data-testid="stMetricDelta"] {
+        color: #7f8c8d !important;
+        justify-content: center;
+    }
+    [data-testid="stMetric"] [data-testid="stMetricDelta"] * {
+        color: #7f8c8d !important;
+    }
+
     .stPlotlyChart {
         background-color: white !important;
         border-radius: 10px;
