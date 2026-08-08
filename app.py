@@ -195,7 +195,7 @@ if os.path.exists(file_path):
                 create_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1))
                 
             c_chart1, c_chart2 = st.columns(2)
-c_chart1, c_chart2 = st.columns(2)
+            c_chart1, c_chart2 = st.columns(2)
             with c_chart1:
                 hc_trend = hc_df.groupby('Month')[['Required_HC_Total', 'Actual_HC_Total']].mean().reset_index()
                 fig1 = go.Figure()
