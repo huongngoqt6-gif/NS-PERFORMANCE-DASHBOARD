@@ -66,6 +66,15 @@ st.markdown('''
         justify-content: space-around;
         padding: 0 10px;
     }
+    /* Chữ MNG/PIC màu xám */
+    .label-part {
+        color: #7f8c8d;
+    }
+    /* Số của MNG/PIC đổi sang màu cam */
+    .num-part {
+        color: #e67e22;
+        font-weight: bold;
+    }
 
     .stPlotlyChart {
         background-color: white !important;
