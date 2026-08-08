@@ -30,19 +30,22 @@ st.markdown('''
         border: 1px solid #e0e0e0;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
         margin-bottom: 15px;
+        text-align: center; /* Căn giữa toàn bộ text trong card */
     }
     .metric-card h4 {
         color: #7f8c8d;
         margin-top: 0;
         font-size: 14px;
         text-transform: uppercase;
+        text-align: center; /* Căn giữa tiêu đề H4 */
     }
     .metric-card .value-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: center; /* Đưa các giá trị ra giữa */
+        gap: 30px; /* Khoảng cách giữa 2 cột (ví dụ MNG và PIC) */
     }
     .metric-card .value-box {
-        text-align: left;
+        text-align: center; /* Căn giữa nội dung từng giá trị */
     }
     .metric-card .value-label {
         color: #7f8c8d;
