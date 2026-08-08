@@ -79,14 +79,6 @@ st.markdown('''
         border-radius: 10px;
         padding: 10px;
     }
-    /* Mở rộng khung chứa biểu đồ của Streamlit, loại bỏ hoàn toàn thanh trượt */
-    [data-testid="stPlotlyChart"] {
-        height: auto !important;
-        min-height: 420px;
-    }
-    .element-container iframe {
-        height: 420px !important;
-    }
 </style>
 ''', unsafe_allow_html=True)
 
