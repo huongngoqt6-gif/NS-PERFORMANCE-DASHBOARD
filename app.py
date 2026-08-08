@@ -72,23 +72,14 @@ st.markdown('''
 ''', unsafe_allow_html=True)
 
 def create_card(title, v1_label, v1, v2_label=None, v2=None):
-    html = f'''
-    <div class="metric-card">
-        <h4>{title}</h4>
-        <div class="value-container">
-            <div class="value-box">
-                <div class="value-label">{v1_label}</div>
-                <div class="value-number">{v1}</div>
-            </div>
-    '''
+    # Viết liền HTML để tránh lỗi khoảng trắng của Markdown
+    html = f'<div class="metric-card"><h4>{title}</h4><div class="value-container"><div class="value-box"><div class="value-label">{v1_label}</div><div class="value-number">{v1}</div></div>'
+    
     if v2_label:
-        html += f'''
-            <div class="value-box">
-                <div class="value-label">{v2_label}</div>
-                <div class="value-number">{v2}</div>
-            </div>
-        '''
+        html += f'<div class="value-box"><div class="value-label">{v2_label}</div><div class="value-number">{v2}</div></div>'
+        
     html += '</div></div>'
+    
     st.markdown(html, unsafe_allow_html=True)
 
 @st.cache_data
