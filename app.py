@@ -378,26 +378,45 @@ if os.path.exists(file_path):
                 
             with c_right:
                 st.markdown("**BU Allocation Data**")
-                st.dataframe(bu_df)
+                df_bu_display = bu_df.copy()
+                df_bu_display.index = range(1, len(df_bu_display) + 1)
+                st.dataframe(df_bu_display, use_container_width=True)
                 
             st.subheader("Details by Services")
             t_a, t_c, t_s, t_e = st.tabs(["Core Service (A)", "Ancillary Service (C)", "Supporting Activity (S)", "Exception Handling (E)"])
+            
             with t_a:
                 df_a = filter_df(data['A'], has_month=False)
-                if 'Total' in df_a.columns: df_a = df_a.sort_values(by='Total', ascending=False)
-                st.dataframe(clean_empty_months(df_a))
+                if 'Total' in df_a.columns: 
+                    df_a = df_a.sort_values(by='Total', ascending=False)
+                df_a = clean_empty_months(df_a)
+                df_a.index = range(1, len(df_a) + 1)
+                st.dataframe(df_a, use_container_width=True)
+                
             with t_c:
                 df_c = filter_df(data['C'], has_month=False)
-                if 'Total' in df_c.columns: df_c = df_c.sort_values(by='Total', ascending=False)
-                st.dataframe(clean_empty_months(df_c))
+                if 'Total' in df_c.columns: 
+                    df_c = df_c.sort_values(by='Total', ascending=False)
+                df_c = clean_empty_months(df_c)
+                df_c.index = range(1, len(df_c) + 1)
+                st.dataframe(df_c, use_container_width=True)
+                
             with t_s:
                 df_s = filter_df(data['S'], has_month=False)
-                if 'Total' in df_s.columns: df_s = df_s.sort_values(by='Total', ascending=False)
-                st.dataframe(clean_empty_months(df_s))
+                if 'Total' in df_s.columns: 
+                    df_s = df_s.sort_values(by='Total', ascending=False)
+                df_s = clean_empty_months(df_s)
+                df_s.index = range(1, len(df_s) + 1)
+                st.dataframe(df_s, use_container_width=True)
+                
             with t_e:
                 df_e = filter_df(data['E'], has_month=False)
-                if 'Total' in df_e.columns: df_e = df_e.sort_values(by='Total', ascending=False)
-                st.dataframe(clean_empty_months(df_e))
+                # Bỏ dòng đầu tiên của bảng Exception Handling
+                if len(df_e) > 0:
+                    df_e = df_e.iloc[1:]
+                df_e = clean_empty_months(df_e)
+                df_e.index = range(1, len(df_e) + 1)
+                st.dataframe(df_e, use_container_width=True)
     except Exception as e:
         st.error(f"Lỗi khi đọc file: {e}. Vui lòng kiểm tra lại cấu trúc file Excel.")
 else:
