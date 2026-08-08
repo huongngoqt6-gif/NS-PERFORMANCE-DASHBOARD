@@ -277,17 +277,15 @@ if os.path.exists(file_path):
                 
             st.subheader("Data Tables")
             
-            # Tạo khoảng cách rõ rệt giữa 2 bảng bằng cách thêm một cột trống ở giữa (tỷ lệ 5 - 0.2 - 5)
-            c_t1, c_space, c_t2 = st.columns([5, 0.4, 5])
+            # Sử dụng tỷ lệ chia cột giống hệt phần biểu đồ phía trên (c_chart1, c_chart2)
+            c_t1, c_t2 = st.columns(2)
             
             with c_t1:
                 st.markdown("**N-S Customer List**")
-                # Dùng hide_index=True để ẩn cột số thứ tự ngoài cùng của bảng
                 st.dataframe(clean_empty_months(nsc_df), use_container_width=True, hide_index=True)
                 
             with c_t2:
                 st.markdown("**Shipment Volume**")
-                # Dùng hide_index=True để không tự động thêm cột số thứ tự
                 st.dataframe(sv_df, use_container_width=True, hide_index=True)
                 
         elif page == "FTE":
