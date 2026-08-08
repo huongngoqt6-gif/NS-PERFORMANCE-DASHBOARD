@@ -263,9 +263,9 @@ if os.path.exists(file_path):
             st.header("Shipment volume")
             c1, c2 = st.columns(2)
             with c1:
-                create_card("Active Customer", "Avg Active", round(sv_df['Active_customer'].mean(), 1))
+               create_metric_card("Active Customer", "Avg Active", round(sv_df['Active_customer'].mean(), 1))
             with c2:
-                create_card("Shipment Volume", "Avg Total", round(sv_df['Total'].mean(), 1))
+               create_metric_card("Shipment Volume", "Avg Total", round(sv_df['Total'].mean(), 1))
                 
             c_chart1, c_chart2 = st.columns(2)
             with c_chart1:
@@ -297,14 +297,14 @@ if os.path.exists(file_path):
             st.header("FTE")
             c1, c2, c3, c4 = st.columns(4)
             with c1:
-                create_card("Approved HC", "MNG", round(hc_df['Approved_HC_MNG'].mean(), 1), "PIC", round(hc_df['Approved_HC_PIC'].mean(), 1))
+                create_metric_card("Approved HC", "MNG", round(hc_df['Approved_HC_MNG'].mean(), 1), "PIC", round(hc_df['Approved_HC_PIC'].mean(), 1))
             with c2:
-                create_card("Actual HC", "MNG", round(hc_df['Actual_HC_MNG'].mean(), 1), "PIC", round(hc_df['Actual_HC_PIC'].mean(), 1))
+                create_metric_card("Actual HC", "MNG", round(hc_df['Actual_HC_MNG'].mean(), 1), "PIC", round(hc_df['Actual_HC_PIC'].mean(), 1))
             with c3:
-                create_card("Required HC", "MNG", round(hc_df['Required_HC_MNG'].mean(), 1), "PIC", round(hc_df['Required_HC_PIC'].mean(), 1))
+                create_metric_card("Required HC", "MNG", round(hc_df['Required_HC_MNG'].mean(), 1), "PIC", round(hc_df['Required_HC_PIC'].mean(), 1))
             with c4:
                 cap_status = hc_df['Capacity_Status'].mode()[0] if not hc_df['Capacity_Status'].empty else ""
-                create_card("Capacity", "%", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", "Status", cap_status)
+                create_metric_card("Capacity", "%", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", "Status", cap_status)
                 
             hc_trend = hc_df.groupby('Month')[['Required_HC_Total', 'Actual_HC_Total', 'Approved_HC_Total']].mean().reset_index()
             fig = go.Figure()
@@ -326,7 +326,7 @@ if os.path.exists(file_path):
                 with cols[idx]:
                     val = bu_df[bu_df['Segment'] == seg]['Pct_of_Network'].mean()
                     if pd.isna(val): val = 0
-                    create_card(seg, "% of Network", f"{round(val * 100, 1)}%")
+                    create_metric_card(seg, "% of Network", f"{round(val * 100, 1)}%")
                     
             c_left, c_right = st.columns(2)
             with c_left:
