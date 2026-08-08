@@ -243,11 +243,20 @@ if os.path.exists(file_path):
             st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("Shipment volume")
             
-            c1, c2 = st.columns(2)
             with c1:
-                st.metric("Active Customer", round(sv_df['Active_customer'].mean(), 1), "Avg Active")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Active Customer</div>
+                    <div class="card-value" style="margin-bottom: 0px;">{round(sv_df['Active_customer'].mean(), 1)}</div>
+                </div>
+                """, unsafe_allow_html=True)
             with c2:
-                st.metric("Shipment Volume", round(sv_df['Total'].mean(), 1), "Avg Total")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Shipment Volume</div>
+                    <div class="card-value" style="margin-bottom: 0px;">{round(sv_df['Total'].mean(), 1)}</div>
+                </div>
+                """, unsafe_allow_html=True)
                 
             c_chart1, c_chart2 = st.columns(2)
             with c_chart1:
