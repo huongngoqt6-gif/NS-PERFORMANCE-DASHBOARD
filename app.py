@@ -11,9 +11,13 @@ st.set_page_config(page_title="NS Dashboard", layout="wide")
 # CSS Styling to match requirements
 st.markdown('''
 <style>
-    /* Main Background & Header */
-    .stApp, .stApp > header {
+    /* Phủ màu nền cho toàn bộ ứng dụng, kéo dài lên sát mép trên */
+    .stApp {
         background-color: #607D8B !important;
+    }
+    /* Ẩn khoảng trắng header mặc định của Streamlit phía trên */
+    header[data-testid="stHeader"] {
+        background-color: rgba(0,0,0,0) !important;
     }
     /* Sidebar */
     [data-testid="stSidebar"] {
@@ -22,16 +26,24 @@ st.markdown('''
     [data-testid="stSidebar"] * {
         color: white !important;
     }
+    /* Tiêu đề chính của dashboard */
+    .main-title {
+        color: white;
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
     /* Cards */
     .metric-card {
         background-color: white;
         border-radius: 10px;
-        padding: 12px 8px; /* Giảm padding ngang một chút để tăng diện tích chứa */
+        padding: 12px 8px;
         border: 1px solid #e0e0e0;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
         margin-bottom: 15px;
         text-align: center;
-        overflow: hidden; /* Ẩn phần nội dung bị tràn nếu có */
+        overflow: hidden;
     }
     .metric-card h4 {
         color: #7f8c8d;
@@ -43,25 +55,25 @@ st.markdown('''
     }
     .metric-card .value-container {
         display: flex;
-        justify-content: space-around; /* Phân bổ đều không gian thay vì dùng gap cố định */
+        justify-content: space-around;
         align-items: center;
         width: 100%;
     }
     .metric-card .value-box {
         text-align: center;
-        flex: 1; /* Giúp các cột tự động co giãn đều trong card */
-        min-width: 0; /* Quan trọng: Ngăn flexitem bị đẩy tràn viền bởi chữ dài */
+        flex: 1;
+        min-width: 0;
         padding: 0 2px;
     }
     .metric-card .value-label {
         color: #7f8c8d;
         font-size: 11px;
         margin-bottom: 3px;
-        white-space: nowrap; /* Giữ nhãn trên 1 dòng */
+        white-space: nowrap;
     }
     .metric-card .value-number {
         color: #e67e22;
-        font-size: 16px; /* Thu nhỏ cỡ chữ một chút (từ 24px xuống 20px) để vừa vặn với từ dài như Overload */
+        font-size: 20px;
         font-weight: bold;
         margin: 0;
         word-break: break-word;
@@ -179,6 +191,7 @@ if os.path.exists(file_path):
         page = st.sidebar.radio("Navigation", ["Overview", "Shipment volume", "FTE", "BU Allocation"])
         
         if page == "Overview":
+            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("Overview")
             c1, c2, c3, c4, c5 = st.columns(5)
             
@@ -224,6 +237,7 @@ if os.path.exists(file_path):
             st.markdown("<div style='color: white; margin-top: 20px; font-style: italic;'>* Ghi chú: 1 FTE tương ứng với 8 tiếng x 95% hiệu suất x 22 ngày trong tháng.</div>", unsafe_allow_html=True)
             
         elif page == "Shipment volume":
+            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("Shipment volume")
             c1, c2 = st.columns(2)
             with c1:
@@ -257,6 +271,7 @@ if os.path.exists(file_path):
                 st.dataframe(sv_df)
                 
         elif page == "FTE":
+            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("FTE")
             c1, c2, c3, c4 = st.columns(4)
             with c1:
@@ -281,6 +296,7 @@ if os.path.exists(file_path):
             st.dataframe(clean_empty_months(filter_df(data['CSFTE'], has_month=False)))
             
         elif page == "BU Allocation":
+            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("BU Allocation")
             segments = ['AE', 'AI', 'OE', 'OI', 'CC', 'TR', 'WH']
             cols = st.columns(7)
