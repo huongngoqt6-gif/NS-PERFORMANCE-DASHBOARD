@@ -99,13 +99,13 @@ st.markdown('''
 </style>
 ''', unsafe_allow_html=True)
 
-def create_card(title, label1, val1, label2, val2, total_label=None, total_val=None):
+def create_metric_card(title, label1, val1, label2, val2, total_label=None, total_val=None):
     total_html = ""
     if total_val is not None and str(total_val) != "nan" and str(total_val) != "":
         total_html = f"""
-        <div style="margin-top: 8px; border-top: 1px dashed #e0e0e0; padding-top: 6px;">
-            <div class="value-label">{total_label}</div>
-            <div class="value-number" style="font-size: 18px;">{total_val}</div>
+        <div style="margin-top: 8px; border-top: 1px dashed #bdc3c7; padding-top: 6px; text-align: center;">
+            <div style="color: #7f8c8d; font-size: 11px; margin-bottom: 3px; white-space: nowrap;">{total_label}</div>
+            <div style="color: #e67e22; font-size: 18px; font-weight: bold; margin: 0;">{total_val}</div>
         </div>
         """
     
@@ -218,16 +218,16 @@ if os.path.exists(file_path):
             c1, c2, c3, c4, c5 = st.columns(5)
             
             with c1:
-                create_card("Approved HC", "MNG", round(hc_df['Approved_HC_MNG'].mean(), 1), "PIC", round(hc_df['Approved_HC_PIC'].mean(), 1), "Total", round(hc_df['Approved_HC_Total'].mean(), 1))
+                create_metric_card("Approved HC", "MNG", round(hc_df['Approved_HC_MNG'].mean(), 1), "PIC", round(hc_df['Approved_HC_PIC'].mean(), 1), "Total", round(hc_df['Approved_HC_Total'].mean(), 1))
             with c2:
-                create_card("Actual HC", "MNG", round(hc_df['Actual_HC_MNG'].mean(), 1), "PIC", round(hc_df['Actual_HC_PIC'].mean(), 1), "Total", round(hc_df['Actual_HC_Total'].mean(), 1))
+                create_metric_card("Actual HC", "MNG", round(hc_df['Actual_HC_MNG'].mean(), 1), "PIC", round(hc_df['Actual_HC_PIC'].mean(), 1), "Total", round(hc_df['Actual_HC_Total'].mean(), 1))
             with c3:
-                create_card("Required HC", "MNG", round(hc_df['Required_HC_MNG'].mean(), 1), "PIC", round(hc_df['Required_HC_PIC'].mean(), 1), "Total", round(hc_df['Required_HC_Total'].mean(), 1))
+                create_metric_card("Required HC", "MNG", round(hc_df['Required_HC_MNG'].mean(), 1), "PIC", round(hc_df['Required_HC_PIC'].mean(), 1), "Total", round(hc_df['Required_HC_Total'].mean(), 1))
             with c4:
                 cap_status = hc_df['Capacity_Status'].mode()[0] if not hc_df['Capacity_Status'].empty else ""
-                create_card("Capacity", "%", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", "Status", cap_status)
+                create_metric_card("Capacity", "%", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", "Status", cap_status)
             with c5:
-                create_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1), "", "")
+                create_metric_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1), "", "")
                 
             c_chart1, c_chart2 = st.columns(2)
             c_chart1, c_chart2 = st.columns(2)
