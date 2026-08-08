@@ -37,7 +37,7 @@ st.markdown('''
         color: #7f8c8d;
         margin-top: 0;
         margin-bottom: 8px;
-        font-size: 13px;
+        font-size: 10px;
         text-transform: uppercase;
         text-align: center;
     }
