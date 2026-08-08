@@ -1,9 +1,9 @@
-import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 import os
+import streamlit as st
 
 # Config page
 st.set_page_config(page_title="NS Dashboard", layout="wide")
@@ -66,16 +66,13 @@ st.markdown('''
         justify-content: space-around;
         padding: 0 10px;
     }
-    /* Chữ MNG/PIC màu xám */
     .label-part {
         color: #7f8c8d;
     }
-    /* Số của MNG/PIC đổi sang màu cam */
     .num-part {
         color: #e67e22;
         font-weight: bold;
     }
-
     .stPlotlyChart {
         background-color: white !important;
         border-radius: 10px;
@@ -105,8 +102,10 @@ def load_data(file):
     bu = pd.read_excel(xls, sheet_name='BU allocation', skiprows=3, header=None)
     bu.columns = ['Office', 'Month', 'Segment', 'Core_Volume', 'Core_Time', 'Ancillary_Volume', 'Ancillary_Time', 'Supporting_Volume', 'Supporting_Time', 'Exception_Volume', 'Exception_Time', 'Total_workload', 'Pct_of_Network']
     
-    # Gán trực tiếp giá trị từ cột M tên là '% of Net Work' trong file Excel nguồn
-    bu['Pct_of_Network'] = pd.read_excel(xls, sheet_name='BU allocation', skiprows=3, header=None)[12]
+    # Lấy trực tiếp giá trị từ cột M ('% of Net Work') của nguồn thay vì tự tính
+    raw_bu_col_m = pd.read_excel(xls, sheet_name='BU allocation', skiprows=3, header=None)
+    if len(raw_bu_col_m.columns) > 12:
+        bu['Pct_of_Network'] = raw_bu_col_m[12]
 
     nsc = pd.read_excel(xls, sheet_name='N-S Customer list', skiprows=3, header=None)
     nsc.columns = ['No', 'Office', 'Customer', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Total']
@@ -280,17 +279,14 @@ if os.path.exists(file_path):
                 
             st.subheader("Data Tables")
             
-            # Tạo khoảng cách rõ rệt giữa 2 bảng bằng cách thêm một cột trống ở giữa (tỷ lệ 5 - 0.2 - 5)
             c_t1, c_space, c_t2 = st.columns([5, 0.4, 5])
             
             with c_t1:
                 st.markdown("**N-S Customer List**")
-                # Dùng hide_index=True để ẩn cột số thứ tự ngoài cùng của bảng
                 st.dataframe(clean_empty_months(nsc_df), use_container_width=True, hide_index=True)
                 
             with c_t2:
                 st.markdown("**Shipment Volume**")
-                # Dùng hide_index=True để không tự động thêm cột số thứ tự
                 st.dataframe(sv_df, use_container_width=True, hide_index=True)
                 
         elif page == "FTE":
@@ -351,7 +347,6 @@ if os.path.exists(file_path):
             
             st.subheader("CS FTE Table")
             df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
-            # Đánh lại index bắt đầu từ 1
             df_csfte.index = range(1, len(df_csfte) + 1)
             st.dataframe(df_csfte, use_container_width=True)
             
@@ -376,7 +371,6 @@ if os.path.exists(file_path):
             with c_left:
                 seg_data = bu_df.groupby('Segment')['Pct_of_Network'].mean().reset_index()
                 
-                # Tạo biểu đồ tròn dạng Donut
                 fig = px.pie(
                     seg_data, 
                     values='Pct_of_Network', 
@@ -385,17 +379,15 @@ if os.path.exists(file_path):
                     title="% of Network by Segment"
                 )
                 
-                # Gắn nhãn tên segment và % trực tiếp lên mảnh biểu đồ
                 fig.update_traces(
                     pull=[0.05] * len(seg_data),
                     textinfo='label+percent',
                     textposition='inside'
                 )
                 
-                # Ẩn chú thích và tăng chiều cao biểu đồ lên (ví dụ: 480 pixel)
                 fig.update_layout(
                     showlegend=False,
-                    height=520  # Bạn có thể tăng/giảm số này tùy ý (mặc định Streamlit thường nhỏ hơn)
+                    height=520
                 )
                 
                 st.plotly_chart(fig, use_container_width=True)
@@ -405,14 +397,13 @@ if os.path.exists(file_path):
                 df_bu_display = bu_df.copy()
                 df_bu_display.index = range(1, len(df_bu_display) + 1)
                 
-                # Định dạng cột Pct_of_Network sang kiểu hiển thị phần trăm
                 st.dataframe(
                     df_bu_display, 
                     use_container_width=True,
                     column_config={
                         "Pct_of_Network": st.column_config.NumberColumn(
                             "Pct_of_Network",
-                            format="%.1f%%"  # Hiển thị 1 chữ số thập phân kèm dấu %
+                            format="%.1f%%"
                         )
                     }
                 )
@@ -446,7 +437,6 @@ if os.path.exists(file_path):
                 
             with t_e:
                 df_e = filter_df(data['E'], has_month=False)
-                # Bỏ dòng đầu tiên của bảng Exception Handling
                 if len(df_e) > 0:
                     df_e = df_e.iloc[1:]
                 df_e = clean_empty_months(df_e)
