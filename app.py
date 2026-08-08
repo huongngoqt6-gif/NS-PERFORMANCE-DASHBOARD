@@ -36,51 +36,35 @@ st.markdown('''
         text-transform: uppercase;
     }
     
-    /* Tùy chỉnh khối chứa metric thành Card nền trắng, bo viền, căn giữa */
-    [data-testid="stMetric"] {
+    /* Thiết kế thẻ Card chuẩn, nền trắng, bo viền, căn giữa tuyệt đối */
+    .custom-metric-card {
         background-color: white;
         border-radius: 10px;
         border: 1px solid #dcdde1;
         padding: 15px;
         box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
         text-align: center;
+        margin-bottom: 10px;
     }
-    
-    /* Chỉnh nhãn tiêu đề card (Label) */
-    [data-testid="stMetric"] label {
-        color: #7f8c8d !important;
-        font-size: 13px !important;
-        text-transform: uppercase;
-        display: block;
-        margin: 0 auto;
-        text-align: center;
-    }
-    
-    /* Chỉnh giá trị số chính thành màu cam */
-    [data-testid="stMetric"] [data-testid="stMetricValue"] {
-        color: #e67e22 !important;
-        font-size: 24px !important;
+    .card-title {
+        color: #7f8c8d;
+        font-size: 12px;
         font-weight: bold;
-        justify-content: center;
+        text-transform: uppercase;
+        margin-bottom: 5px;
     }
-    
-    /* BỎ NỀN XANH VÀ CĂN GIỮA PHẦN DELTA */
-    [data-testid="stMetric"] [data-testid="stMetricDelta"] {
-        background-color: transparent !important;
-        border: none !important;
-        justify-content: center !important;
-        padding: 0 !important;
+    .card-value {
+        color: #e67e22;
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 5px;
     }
-    
-    /* Đổi màu chữ phần phụ đề thành màu cam và căn giữa */
-    [data-testid="stMetric"] [data-testid="stMetricDelta"] * {
-        color: #e67e22 !important;
-        background-color: transparent !important;
-    }
-    
-    /* ẨN HOÀN TOÀN MŨI TÊN TRONG DELTA */
-    [data-testid="stMetric"] [data-testid="stMetricDelta"] svg {
-        display: none !important;
+    .card-sub {
+        color: #7f8c8d;
+        font-size: 13px;
+        display: flex;
+        justify-content: space-around;
+        padding: 0 10px;
     }
 
     .stPlotlyChart {
@@ -179,16 +163,46 @@ if os.path.exists(file_path):
             
             c1, c2, c3, c4, c5 = st.columns(5)
             with c1:
-                st.metric("Approved HC (Total)", round(hc_df['Approved_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Approved_HC_MNG'].mean(), 1)}       PIC: {round(hc_df['Approved_HC_PIC'].mean(), 1)}")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Approved HC (Total)</div>
+                    <div class="card-value">{round(hc_df['Approved_HC_Total'].mean(), 1)}</div>
+                    <div class="card-sub"><span>MNG: {round(hc_df['Approved_HC_MNG'].mean(), 1)}</span><span>PIC: {round(hc_df['Approved_HC_PIC'].mean(), 1)}</span></div>
+                </div>
+                """, unsafe_allow_html=True)
             with c2:
-                st.metric("Actual HC (Total)", round(hc_df['Actual_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Actual_HC_MNG'].mean(), 1)}       PIC: {round(hc_df['Actual_HC_PIC'].mean(), 1)}")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Actual HC (Total)</div>
+                    <div class="card-value">{round(hc_df['Actual_HC_Total'].mean(), 1)}</div>
+                    <div class="card-sub"><span>MNG: {round(hc_df['Actual_HC_MNG'].mean(), 1)}</span><span>PIC: {round(hc_df['Actual_HC_PIC'].mean(), 1)}</span></div>
+                </div>
+                """, unsafe_allow_html=True)
             with c3:
-                st.metric("Required HC (Total)", round(hc_df['Required_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Required_HC_MNG'].mean(), 1)}       PIC: {round(hc_df['Required_HC_PIC'].mean(), 1)}")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Required HC (Total)</div>
+                    <div class="card-value">{round(hc_df['Required_HC_Total'].mean(), 1)}</div>
+                    <div class="card-sub"><span>MNG: {round(hc_df['Required_HC_MNG'].mean(), 1)}</span><span>PIC: {round(hc_df['Required_HC_PIC'].mean(), 1)}</span></div>
+                </div>
+                """, unsafe_allow_html=True)
             with c4:
                 cap_status = hc_df['Capacity_Status'].mode()[0] if not hc_df['Capacity_Status'].empty else ""
-                st.metric("Capacity %", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", f"Status: {cap_status}")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Capacity %</div>
+                    <div class="card-value">{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%</div>
+                    <div class="card-sub"><span>Status: {cap_status}</span></div>
+                </div>
+                """, unsafe_allow_html=True)
             with c5:
-                st.metric("Shipment Volume", round(sv_df['Total'].mean(), 1), "Total Avg")
+                st.markdown(f"""
+                <div class="custom-metric-card">
+                    <div class="card-title">Shipment Volume</div>
+                    <div class="card-value">{round(sv_df['Total'].mean(), 1)}</div>
+                    <div class="card-sub"><span>Total Avg</span></div>
+                </div>
+                """, unsafe_allow_html=True)
                 
             c_chart1, c_chart2 = st.columns(2)
             with c_chart1:
