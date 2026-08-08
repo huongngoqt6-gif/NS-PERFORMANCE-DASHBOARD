@@ -46,7 +46,7 @@ st.markdown('''
         text-align: center;
     }
     
-    /* Chỉnh nhãn tiêu đề card (Label) thành màu xám, chữ thường/hoa, căn giữa */
+    /* Chỉnh nhãn tiêu đề card (Label) */
     [data-testid="stMetric"] label {
         color: #7f8c8d !important;
         font-size: 13px !important;
@@ -64,13 +64,23 @@ st.markdown('''
         justify-content: center;
     }
     
-    /* Chỉnh phần phụ đề/delta bên dưới thành màu xám */
+    /* BỎ NỀN XANH VÀ CĂN GIỮA PHẦN DELTA */
     [data-testid="stMetric"] [data-testid="stMetricDelta"] {
-        color: #7f8c8d !important;
-        justify-content: center;
+        background-color: transparent !important;
+        border: none !important;
+        justify-content: center !important;
+        padding: 0 !important;
     }
+    
+    /* Đổi màu chữ phần phụ đề thành màu cam và căn giữa */
     [data-testid="stMetric"] [data-testid="stMetricDelta"] * {
-        color: #7f8c8d !important;
+        color: #e67e22 !important;
+        background-color: transparent !important;
+    }
+    
+    /* ẨN HOÀN TOÀN MŨI TÊN TRONG DELTA */
+    [data-testid="stMetric"] [data-testid="stMetricDelta"] svg {
+        display: none !important;
     }
 
     .stPlotlyChart {
