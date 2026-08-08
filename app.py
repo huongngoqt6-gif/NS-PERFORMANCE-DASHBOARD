@@ -99,16 +99,33 @@ st.markdown('''
 </style>
 ''', unsafe_allow_html=True)
 
-def create_card(title, v1_label, v1, v2_label=None, v2=None):
-    # Viết liền HTML để tránh lỗi khoảng trắng của Markdown
-    html = f'<div class="metric-card"><h4>{title}</h4><div class="value-container"><div class="value-box"><div class="value-label">{v1_label}</div><div class="value-number">{v1}</div></div>'
+def create_card(title, label1, val1, label2, val2, total_label=None, total_val=None):
+    total_html = ""
+    if total_val is not None:
+        total_html = f"""
+        <div style="margin-top: 8px; border-top: 1px dashed #e0e0e0; padding-top: 6px;">
+            <div class="value-label">{total_label}</div>
+            <div class="value-number" style="font-size: 18px;">{total_val}</div>
+        </div>
+        """
     
-    if v2_label:
-        html += f'<div class="value-box"><div class="value-label">{v2_label}</div><div class="value-number">{v2}</div></div>'
-        
-    html += '</div></div>'
-    
-    st.markdown(html, unsafe_allow_html=True)
+    html_code = f"""
+    <div class="metric-card">
+        <h4>{title}</h4>
+        <div class="value-container">
+            <div class="value-box">
+                <div class="value-label">{label1}</div>
+                <div class="value-number">{val1}</div>
+            </div>
+            <div class="value-box">
+                <div class="value-label">{label2}</div>
+                <div class="value-number">{val2}</div>
+            </div>
+        </div>
+        {total_html}
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
 
 @st.cache_data
 def load_data(file):
@@ -201,16 +218,16 @@ if os.path.exists(file_path):
             c1, c2, c3, c4, c5 = st.columns(5)
             
             with c1:
-                create_card("Approved HC", "MNG", round(hc_df['Approved_HC_MNG'].mean(), 1), "PIC", round(hc_df['Approved_HC_PIC'].mean(), 1))
+                create_card("Approved HC", "MNG", round(hc_df['Approved_HC_MNG'].mean(), 1), "PIC", round(hc_df['Approved_HC_PIC'].mean(), 1), "Total", round(hc_df['Approved_HC_Total'].mean(), 1))
             with c2:
-                create_card("Actual HC", "MNG", round(hc_df['Actual_HC_MNG'].mean(), 1), "PIC", round(hc_df['Actual_HC_PIC'].mean(), 1))
+                create_card("Actual HC", "MNG", round(hc_df['Actual_HC_MNG'].mean(), 1), "PIC", round(hc_df['Actual_HC_PIC'].mean(), 1), "Total", round(hc_df['Actual_HC_Total'].mean(), 1))
             with c3:
-                create_card("Required HC", "MNG", round(hc_df['Required_HC_MNG'].mean(), 1), "PIC", round(hc_df['Required_HC_PIC'].mean(), 1))
+                create_card("Required HC", "MNG", round(hc_df['Required_HC_MNG'].mean(), 1), "PIC", round(hc_df['Required_HC_PIC'].mean(), 1), "Total", round(hc_df['Required_HC_Total'].mean(), 1))
             with c4:
                 cap_status = hc_df['Capacity_Status'].mode()[0] if not hc_df['Capacity_Status'].empty else ""
                 create_card("Capacity", "%", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", "Status", cap_status)
             with c5:
-                create_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1))
+                create_card("Shipment Volume", "Total Avg", round(sv_df['Total'].mean(), 1), "", "")
                 
             c_chart1, c_chart2 = st.columns(2)
             c_chart1, c_chart2 = st.columns(2)
