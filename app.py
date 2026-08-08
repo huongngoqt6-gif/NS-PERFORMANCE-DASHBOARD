@@ -179,11 +179,11 @@ if os.path.exists(file_path):
             
             c1, c2, c3, c4, c5 = st.columns(5)
             with c1:
-                st.metric("Approved HC (Total)", round(hc_df['Approved_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Approved_HC_MNG'].mean(), 1)} | PIC: {round(hc_df['Approved_HC_PIC'].mean(), 1)}")
+                st.metric("Approved HC (Total)", round(hc_df['Approved_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Approved_HC_MNG'].mean(), 1)}       PIC: {round(hc_df['Approved_HC_PIC'].mean(), 1)}")
             with c2:
-                st.metric("Actual HC (Total)", round(hc_df['Actual_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Actual_HC_MNG'].mean(), 1)} | PIC: {round(hc_df['Actual_HC_PIC'].mean(), 1)}")
+                st.metric("Actual HC (Total)", round(hc_df['Actual_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Actual_HC_MNG'].mean(), 1)}       PIC: {round(hc_df['Actual_HC_PIC'].mean(), 1)}")
             with c3:
-                st.metric("Required HC (Total)", round(hc_df['Required_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Required_HC_MNG'].mean(), 1)} | PIC: {round(hc_df['Required_HC_PIC'].mean(), 1)}")
+                st.metric("Required HC (Total)", round(hc_df['Required_HC_Total'].mean(), 1), f"MNG: {round(hc_df['Required_HC_MNG'].mean(), 1)}       PIC: {round(hc_df['Required_HC_PIC'].mean(), 1)}")
             with c4:
                 cap_status = hc_df['Capacity_Status'].mode()[0] if not hc_df['Capacity_Status'].empty else ""
                 st.metric("Capacity %", f"{round(hc_df['Capacity_Pct'].mean() * 100, 1)}%", f"Status: {cap_status}")
