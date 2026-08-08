@@ -104,6 +104,9 @@ def load_data(file):
 
     bu = pd.read_excel(xls, sheet_name='BU allocation', skiprows=3, header=None)
     bu.columns = ['Office', 'Month', 'Segment', 'Core_Volume', 'Core_Time', 'Ancillary_Volume', 'Ancillary_Time', 'Supporting_Volume', 'Supporting_Time', 'Exception_Volume', 'Exception_Time', 'Total_workload', 'Pct_of_Network']
+    
+    # Gán trực tiếp giá trị từ cột M tên là '% of Net Work' trong file Excel nguồn
+    bu['Pct_of_Network'] = pd.read_excel(xls, sheet_name='BU allocation', skiprows=3, header=None)[12]
 
     nsc = pd.read_excel(xls, sheet_name='N-S Customer list', skiprows=3, header=None)
     nsc.columns = ['No', 'Office', 'Customer', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Total']
