@@ -100,24 +100,27 @@ st.markdown('''
 ''', unsafe_allow_html=True)
 
 def create_metric_card(title, label1, val1, label2=None, val2=None, total_label=None, total_val=None):
+    # Xử lý phần hiển thị 2 cột giá trị (label1/val1 và label2/val2)
+    box2_html = ""
+    if label2 is not None and str(label2) != "":
+        box2_html = f"""
+        <div class="value-box">
+            <div class="value-label">{label2}</div>
+            <div class="value-number">{val2}</div>
+        </div>
+        """
+    
+    # Xử lý phần hiển thị tổng bên dưới (nếu có)
     total_html = ""
     if total_val is not None and str(total_val) != "nan" and str(total_val) != "":
         total_html = f"""
         <div style="margin-top: 8px; border-top: 1px dashed #bdc3c7; padding-top: 6px; text-align: center;">
-            <div style="color: #7f8c8d; font-size: 11px; margin-bottom: 3px; white-space: nowrap;">{total_label}</div>
+            <div style="color: #7f8c8d; font-size: 11px; margin-bottom: 3px;">{total_label}</div>
             <div style="color: #e67e22; font-size: 18px; font-weight: bold; margin: 0;">{total_val}</div>
         </div>
         """
-    
-    second_box_html = ""
-    if label2 is not None and val2 is not None and label2 != "":
-        second_box_html = f"""
-            <div class="value-box">
-                <div class="value-label">{label2}</div>
-                <div class="value-number">{val2}</div>
-            </div>
-        """
 
+    # Gộp toàn bộ vào một khung chuẩn duy nhất
     html_code = f"""
     <div class="metric-card">
         <h4>{title}</h4>
@@ -126,7 +129,7 @@ def create_metric_card(title, label1, val1, label2=None, val2=None, total_label=
                 <div class="value-label">{label1}</div>
                 <div class="value-number">{val1}</div>
             </div>
-            {second_box_html}
+            {box2_html}
         </div>
         {total_html}
     </div>
