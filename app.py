@@ -37,7 +37,7 @@ st.markdown('''
         color: #7f8c8d;
         margin-top: 0;
         margin-bottom: 8px;
-        font-size: 10px;
+        font-size: 13px;
         text-transform: uppercase;
         text-align: center;
     }
@@ -61,7 +61,7 @@ st.markdown('''
     }
     .metric-card .value-number {
         color: #e67e22;
-        font-size: 20px; /* Thu nhỏ cỡ chữ một chút (từ 24px xuống 20px) để vừa vặn với từ dài như Overload */
+        font-size: 18px; /* Thu nhỏ cỡ chữ một chút (từ 24px xuống 20px) để vừa vặn với từ dài như Overload */
         font-weight: bold;
         margin: 0;
         word-break: break-word;
