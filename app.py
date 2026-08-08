@@ -271,7 +271,7 @@ if os.path.exists(file_path):
                 mode_sums = sv_df[modes].sum().reset_index()
                 mode_sums.columns = ['Mode', 'Volume']
                 mode_sums = mode_sums.sort_values(by='Volume', ascending=False)
-                fig2 = px.bar(mode_sums, x='Volume', y='Mode', orientation='h', text='Volume', title="Top Transportation Mode")
+                fig2 = px.bar(mode_sums, x='Volume', y='Mode', orientation='h', text='Volume', title="Top Volume by Transportation Mode")
                 fig2.update_layout(yaxis={'categoryorder':'total ascending'})
                 st.plotly_chart(fig2, use_container_width=True)
                 
