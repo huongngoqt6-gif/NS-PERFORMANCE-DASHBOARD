@@ -243,6 +243,8 @@ if os.path.exists(file_path):
             st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("Shipment volume")
             
+            c1, c2 = st.columns(2
+            
             with c1:
                 st.markdown(f"""
                 <div class="custom-metric-card">
