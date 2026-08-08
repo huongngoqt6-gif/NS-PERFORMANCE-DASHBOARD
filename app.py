@@ -276,13 +276,19 @@ if os.path.exists(file_path):
                 st.plotly_chart(fig2, use_container_width=True)
                 
             st.subheader("Data Tables")
-            c_t1, c_t2 = st.columns(2)
+            
+            # Tạo khoảng cách rõ rệt giữa 2 bảng bằng cách thêm một cột trống ở giữa (tỷ lệ 5 - 0.2 - 5)
+            c_t1, c_space, c_t2 = st.columns([5, 0.4, 5])
+            
             with c_t1:
                 st.markdown("**N-S Customer List**")
-                st.dataframe(clean_empty_months(nsc_df))
+                # Dùng hide_index=True để ẩn cột số thứ tự ngoài cùng của bảng
+                st.dataframe(clean_empty_months(nsc_df), use_container_width=True, hide_index=True)
+                
             with c_t2:
                 st.markdown("**Shipment Volume**")
-                st.dataframe(sv_df)
+                # Dùng hide_index=True để không tự động thêm cột số thứ tự
+                st.dataframe(sv_df, use_container_width=True, hide_index=True)
                 
         elif page == "FTE":
             st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
