@@ -101,7 +101,7 @@ st.markdown('''
 
 def create_card(title, label1, val1, label2, val2, total_label=None, total_val=None):
     total_html = ""
-    if total_val is not None and str(total_val) != "nan":
+    if total_val is not None and str(total_val) != "nan" and str(total_val) != "":
         total_html = f"""
         <div style="margin-top: 8px; border-top: 1px dashed #e0e0e0; padding-top: 6px;">
             <div class="value-label">{total_label}</div>
