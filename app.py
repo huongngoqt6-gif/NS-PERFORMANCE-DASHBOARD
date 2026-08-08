@@ -347,7 +347,10 @@ if os.path.exists(file_path):
             st.plotly_chart(fig, use_container_width=True)
             
             st.subheader("CS FTE Table")
-            st.dataframe(clean_empty_months(filter_df(data['CSFTE'], has_month=False)))
+            df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
+            # Đánh lại index bắt đầu từ 1
+            df_csfte.index = range(1, len(df_csfte) + 1)
+            st.dataframe(df_csfte, use_container_width=True)
             
         elif page == "BU Allocation":
             st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
