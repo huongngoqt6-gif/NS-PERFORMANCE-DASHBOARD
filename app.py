@@ -372,8 +372,28 @@ if os.path.exists(file_path):
             c_left, c_right = st.columns(2)
             with c_left:
                 seg_data = bu_df.groupby('Segment')['Pct_of_Network'].mean().reset_index()
-                fig = px.pie(seg_data, values='Pct_of_Network', names='Segment', hole=0.5, title="% of Network by Segment")
-                fig.update_traces(pull=[0.05]*len(seg_data))
+                
+                # Tạo biểu đồ tròn dạng Donut
+                fig = px.pie(
+                    seg_data, 
+                    values='Pct_of_Network', 
+                    names='Segment', 
+                    hole=0.5, 
+                    title="% of Network by Segment"
+                )
+                
+                # Gắn nhãn tên segment và % trực tiếp lên mảnh biểu đồ, đồng thời ẩn chú thích bên phải
+                fig.update_traces(
+                    pull=[0.05] * len(seg_data),
+                    textinfo='label+percent',  # Hiển thị cả tên segment và %
+                    textposition='inside'      # Đặt nhãn vào bên trong các mảnh
+                )
+                
+                # Tắt hoàn toàn phần chú thích (legend) bên phía tay phải
+                fig.update_layout(
+                    showlegend=False
+                )
+                
                 st.plotly_chart(fig, use_container_width=True)
                 
             with c_right:
