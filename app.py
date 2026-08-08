@@ -207,9 +207,10 @@ if os.path.exists(file_path):
                 
             with c_chart2:
                 st.markdown("<div style='background: white; padding: 10px; border-radius: 10px;'>", unsafe_allow_html=True)
-                modes = ['AI', 'AE', 'OILCL', 'OIFCL', 'OELCL', 'OEFCL', 'DI', 'DE', 'DM', 'CE', 'CI', 'HE', 'HI', 'RE', 'RI', 'RD']
-                sv_trend = sv_df.groupby('Month')[modes].sum().reset_index()
-                fig2 = px.area(sv_trend, x='Month', y=modes, title="Trend Volume by Transportation Mode")
+                # Gom nhóm theo Tháng và Office, lấy tổng cột Total
+                sv_trend = sv_df.groupby(['Month', 'Office'])['Total'].sum().reset_index()
+                # Vẽ biểu đồ cột (hoặc đường) thể hiện tổng Volume theo tháng và chia theo Office
+                fig2 = px.bar(sv_trend, x='Month', y='Total', color='Office', barmode='group', title="Total Volume Trend by Month & Office")
                 fig2.update_layout(margin=dict(l=0, r=0, t=30, b=0), plot_bgcolor='rgba(0,0,0,0)')
                 st.plotly_chart(fig2, use_container_width=True)
                 st.markdown("</div>", unsafe_allow_html=True)
