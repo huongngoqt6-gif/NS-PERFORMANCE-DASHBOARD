@@ -61,7 +61,7 @@ st.markdown('''
     }
     .metric-card .value-number {
         color: #e67e22;
-        font-size: 18px; /* Thu nhỏ cỡ chữ một chút (từ 24px xuống 20px) để vừa vặn với từ dài như Overload */
+        font-size: 16px; /* Thu nhỏ cỡ chữ một chút (từ 24px xuống 20px) để vừa vặn với từ dài như Overload */
         font-weight: bold;
         margin: 0;
         word-break: break-word;
