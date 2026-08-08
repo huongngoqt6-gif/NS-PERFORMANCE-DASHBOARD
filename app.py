@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
+import os
 
 # Config page
 st.set_page_config(page_title="NS Dashboard", layout="wide")
@@ -140,11 +141,13 @@ def clean_empty_months(df):
     return df[[c for c in df.columns if c in cols_to_keep]]
 
 st.sidebar.title("NS Dashboard")
-uploaded_file = st.sidebar.file_uploader("Upload NTW DATA FOR DASHBOARD.xlsx", type=['xlsx'])
 
-if uploaded_file:
+# Chỉ định đường dẫn file trực tiếp thay vì upload
+file_path = "NTW DATA FOR DASHBOARD.xlsx"
+
+if os.path.exists(file_path):
     try:
-        data = load_data(uploaded_file)
+        data = load_data(file_path)
         
         # FILTERS
         st.sidebar.subheader("Filters (Sort)")
@@ -310,9 +313,4 @@ if uploaded_file:
     except Exception as e:
         st.error(f"Lỗi khi đọc file: {e}. Vui lòng kiểm tra lại cấu trúc file Excel.")
 else:
-    st.info("Vui lòng tải lên file NTW DATA FOR DASHBOARD.xlsx ở thanh menu bên trái để hiển thị Dashboard.")
-fig.update_layout(xaxis_title="", yaxis_title="Bookings")
-st.plotly_chart(fig, use_container_width=True)
-
-st.subheader("Source Data")
-st.dataframe(filtered, hide_index=True, use_container_width=True)
+    st.error(f"Không tìm thấy file '{file_path}'. Vui lòng đảm bảo file Excel đã được đưa lên cùng thư mục trên GitHub.")
