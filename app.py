@@ -337,46 +337,55 @@ if os.path.exists(file_path):
                 </div>
                 """, unsafe_allow_html=True)
                 
-            hc_trend = hc_df.groupby('Month')[['Required_HC_Total', 'Actual_HC_Total', 'Approved_HC_Total']].mean().reset_index()
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Approved_HC_Total'], name='Approved HC', line=dict(color='blue')))
-            fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Required_HC_Total'], name='Required HC', line=dict(color='gray')))
-            fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Actual_HC_Total'], name='Actual HC', fill='tonexty', line=dict(color='orange')))
-            fig.update_layout(title="HC Trends", plot_bgcolor='rgba(0,0,0,0)')
-            st.plotly_chart(fig, use_container_width=True)
+            # --- CHIA ĐÔI TRANG: BIỂU ĐỒ VÀ BẢNG HC NẰM CẠNH NHAU ---
+            col_chart, col_table = st.columns(2)
             
-            # Bảng HC Performance Data chuẩn cú pháp Streamlit
-            st.subheader("HC Performance Data")
-            
-            df_hc_table = hc_df[['Office', 'Month', 'Actual_HC_Total', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']].copy()
-            df_hc_table.columns = ['Office', 'Month', 'Total Actual HC', 'Total Required HC', '% Capacity', 'Status']
-            df_hc_table.index = range(1, len(df_hc_table) + 1)
-            
-            def color_hc_status(val):
-                if val == "Overload":
-                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'
-                elif val == "High load":
-                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'
-                elif val == "Balanced":
-                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'
-                elif val == "Less load":
-                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'
-                return ''
+            with col_chart:
+                hc_trend = hc_df.groupby('Month')[['Required_HC_Total', 'Actual_HC_Total', 'Approved_HC_Total']].mean().reset_index()
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Approved_HC_Total'], name='Approved HC', line=dict(color='blue')))
+                fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Required_HC_Total'], name='Required HC', line=dict(color='gray')))
+                fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Actual_HC_Total'], name='Actual HC', fill='tonexty', line=dict(color='orange')))
+                
+                # Cố định chiều cao (height=400) để cân đối với khung bảng bên cạnh
+                fig.update_layout(title="HC Trends", height=400, margin=dict(l=10, r=10, t=40, b=10), plot_bgcolor='rgba(0,0,0,0)')
+                st.plotly_chart(fig, use_container_width=True)
+                
+            with col_table:
+                st.markdown("**HC Performance Data**")
+                
+                df_hc_table = hc_df[['Office', 'Month', 'Actual_HC_Total', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']].copy()
+                df_hc_table.columns = ['Office', 'Month', 'Total Actual HC', 'Total Required HC', '% Capacity', 'Status']
+                df_hc_table.index = range(1, len(df_hc_table) + 1)
+                
+                def color_hc_status(val):
+                    if val == "Overload":
+                        return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'
+                    elif val == "High load":
+                        return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'
+                    elif val == "Balanced":
+                        return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'
+                    elif val == "Less load":
+                        return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'
+                    return ''
 
-            styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
+                styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
+                
+                # Cố định chiều cao hiển thị của bảng (height=400) tương đương với biểu đồ phía trên
+                st.dataframe(
+                    styled_hc_table, 
+                    use_container_width=True,
+                    height=400,
+                    column_config={
+                        "% Capacity": st.column_config.NumberColumn(
+                            "% Capacity",
+                            format="%.1f%%"
+                        )
+                    }
+                )
+            # --------------------------------------------------------
             
-            st.dataframe(
-                styled_hc_table, 
-                use_container_width=True,
-                column_config={
-                    "% Capacity": st.column_config.NumberColumn(
-                        "% Capacity",
-                        format="%.1f%%"
-                    )
-                }
-            )
-            
-            # Bảng CS FTE Table
+            # Bảng CS FTE Table ở phía dưới
             st.subheader("CS FTE Table")
             df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
             
