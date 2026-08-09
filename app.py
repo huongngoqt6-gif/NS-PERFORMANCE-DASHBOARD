@@ -6,7 +6,7 @@ import os
 import streamlit as st
 
 # Config page
-st.set_page_config(page_title="CSD Performance Dashboard", layout="wide")
+st.set_page_config(page_title="CSD Performance", layout="wide")
 
 # CSS Styling để tùy biến st.metric thành các card nền trắng, bo viền, căn giữa, chữ xám, số cam
 st.markdown('''
