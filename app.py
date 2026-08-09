@@ -282,7 +282,7 @@ if os.path.exists(file_path):
             c_t1, c_space, c_t2 = st.columns([5, 0.4, 5])
             
             with c_t1:
-                st.markdown("**N-S Customer List**")
+                st.markdown("**CSD Customer List**")
                 st.dataframe(clean_empty_months(nsc_df), use_container_width=True, hide_index=True)
                 
             with c_t2:
