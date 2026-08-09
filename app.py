@@ -345,10 +345,38 @@ if os.path.exists(file_path):
             fig.update_layout(title="HC Trends", plot_bgcolor='rgba(0,0,0,0)')
             st.plotly_chart(fig, use_container_width=True)
             
-            # --- PHẦN BẢNG HC DATA MỚI ĐÍNH KÈM ---
-            HC Performance Data
-            # --------------------------------------
+            # Bảng HC Performance Data chuẩn cú pháp Streamlit
+            st.subheader("HC Performance Data")
             
+            df_hc_table = hc_df[['Office', 'Month', 'Actual_HC_Total', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']].copy()
+            df_hc_table.columns = ['Office', 'Month', 'Total Actual HC', 'Total Required HC', '% Capacity', 'Status']
+            df_hc_table.index = range(1, len(df_hc_table) + 1)
+            
+            def color_hc_status(val):
+                if val == "Overload":
+                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'
+                elif val == "High load":
+                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'
+                elif val == "Balanced":
+                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'
+                elif val == "Less load":
+                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'
+                return ''
+
+            styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
+            
+            st.dataframe(
+                styled_hc_table, 
+                use_container_width=True,
+                column_config={
+                    "% Capacity": st.column_config.NumberColumn(
+                        "% Capacity",
+                        format="%.1f%%"
+                    )
+                }
+            )
+            
+            # Bảng CS FTE Table
             st.subheader("CS FTE Table")
             df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
             
