@@ -6,7 +6,7 @@ import os
 import streamlit as st
 
 # Config page
-st.set_page_config(page_title="NS Dashboard", layout="wide")
+st.set_page_config(page_title="CSD Performance Dashboard", layout="wide")
 
 # CSS Styling để tùy biến st.metric thành các card nền trắng, bo viền, căn giữa, chữ xám, số cam
 st.markdown('''
@@ -169,7 +169,7 @@ if os.path.exists(file_path):
         page = st.sidebar.radio("Navigation", ["Overview", "Shipment volume", "FTE", "BU Allocation"])
         
         if page == "Overview":
-            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
+            st.markdown('<div class="main-title">CSD Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("Overview")
             
             c1, c2, c3, c4, c5 = st.columns(5)
