@@ -242,7 +242,7 @@ if os.path.exists(file_path):
             st.markdown("<div style='color: white; margin-top: 20px; font-style: italic;'>* Ghi chú: 1 FTE tương ứng với 8 tiếng x 95% hiệu suất x 22 ngày trong tháng.</div>", unsafe_allow_html=True)
             
         elif page == "Shipment volume":
-            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
+            st.markdown('<div class="main-title">CSD Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("Shipment volume")
             
             c1, c2 = st.columns(2)
@@ -290,7 +290,7 @@ if os.path.exists(file_path):
                 st.dataframe(sv_df, use_container_width=True, hide_index=True)
                 
         elif page == "FTE":
-            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
+            st.markdown('<div class="main-title">CSD Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("FTE")
             
             c1, c2, c3, c4 = st.columns(4)
@@ -351,7 +351,7 @@ if os.path.exists(file_path):
             st.dataframe(df_csfte, use_container_width=True)
             
         elif page == "BU Allocation":
-            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
+            st.markdown('<div class="main-title">CSD Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("BU Allocation")
             
             segments = ['AE', 'AI', 'OE', 'OI', 'CC', 'TR', 'WH']
