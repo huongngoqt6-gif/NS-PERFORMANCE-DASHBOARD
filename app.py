@@ -346,42 +346,7 @@ if os.path.exists(file_path):
             st.plotly_chart(fig, use_container_width=True)
             
             # --- PHẦN BẢNG HC DATA MỚI ĐÍNH KÈM ---
-            st.subheader("HC Performance Data")
-            
-            # Trích xuất các cột cần thiết từ hc_df dựa theo yêu cầu (Office, Month, Total Actual HC, Total Required HC, Capacity_Pct, Capacity_Status)
-            df_hc_table = hc_df[['Office', 'Month', 'Actual_HC_Total', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']].copy()
-            df_hc_table.columns = ['Office', 'Month', 'Total Actual HC', 'Total Required HC', '% Capacity', 'Status']
-            
-            # Hàm tô màu cho cột Status theo đúng logic yêu cầu
-            def color_hc_status(val):
-                if val == "Overload":
-                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'  # Đỏ
-                elif val == "High load":
-                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'  # Cam
-                elif val == "Balanced":
-                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'  # Xanh dương
-                elif val == "Less load":
-                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'  # Xanh lá
-                return ''
-
-            # Áp dụng style màu cho cột Status
-            styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
-            
-            # Đánh lại index bắt đầu từ 1 cho bảng
-            df_hc_table.index = range(1, len(df_hc_table) + 1)
-            # Truyền lại index cho styled dataframe
-            styled_hc_table.data.index = df_hc_table.index
-
-            st.dataframe(
-                styled_hc_table, 
-                use_container_width=True,
-                column_config={
-                    "% Capacity": st.column_config.NumberColumn(
-                        "% Capacity",
-                        format="%.1f%%"  # Hiển thị định dạng phần trăm trực quan
-                    )
-                }
-            )
+            HC Performance Data
             # --------------------------------------
             
             st.subheader("CS FTE Table")
