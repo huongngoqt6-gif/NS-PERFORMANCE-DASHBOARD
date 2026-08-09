@@ -337,7 +337,7 @@ if os.path.exists(file_path):
                 </div>
                 """, unsafe_allow_html=True)
                 
-            # --- CHIA ĐÔI TRANG: BIỂU ĐỒ VÀ BẢNG HC NẰM CẠNH NHAU ---
+            # --- CÂN BẰNG KHUNG TRẮNG HAI BÊN ---
             col_chart, col_table = st.columns(2)
             
             with col_chart:
@@ -347,8 +347,14 @@ if os.path.exists(file_path):
                 fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Required_HC_Total'], name='Required HC', line=dict(color='gray')))
                 fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Actual_HC_Total'], name='Actual HC', fill='tonexty', line=dict(color='orange')))
                 
-                # Cố định chiều cao (height=400) để cân đối với khung bảng bên cạnh
-                fig.update_layout(title="HC Trends", height=400, margin=dict(l=10, r=10, t=40, b=10), plot_bgcolor='rgba(0,0,0,0)')
+                # Đồng bộ chiều cao khung Plotly khớp hoàn hảo với khung chứa bảng (375px)
+                fig.update_layout(
+                    title="HC Trends", 
+                    height=375, 
+                    margin=dict(l=20, r=20, t=40, b=20), 
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)'
+                )
                 st.plotly_chart(fig, use_container_width=True)
                 
             with col_table:
@@ -371,11 +377,11 @@ if os.path.exists(file_path):
 
                 styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
                 
-                # Cố định chiều cao hiển thị của bảng (height=400) tương đương với biểu đồ phía trên
+                # Cố định chiều cao bảng bằng đúng chiều cao biểu đồ để hai khung trắng cân bằng tuyệt đối
                 st.dataframe(
                     styled_hc_table, 
                     use_container_width=True,
-                    height=400,
+                    height=375,
                     column_config={
                         "% Capacity": st.column_config.NumberColumn(
                             "% Capacity",
@@ -383,7 +389,7 @@ if os.path.exists(file_path):
                         )
                     }
                 )
-            # --------------------------------------------------------
+            # ------------------------------------
             
             # Bảng CS FTE Table ở phía dưới
             st.subheader("CS FTE Table")
