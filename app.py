@@ -289,8 +289,7 @@ if os.path.exists(file_path):
                 st.markdown("**Shipment Volume**")
                 st.dataframe(sv_df, use_container_width=True, hide_index=True)
                 
-        elif page == "FTE":
-            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("FTE")
             
             c1, c2, c3, c4 = st.columns(4)
@@ -337,21 +336,23 @@ if os.path.exists(file_path):
                 </div>
                 """, unsafe_allow_html=True)
                 
-            # --- CÂN BẰNG KHUNG TRẮNG HAI BÊN ---
+            # --- CHIA ĐÔI TRANG VỚI TIÊU ĐỀ ĐỒNG BỘ ---
             col_chart, col_table = st.columns(2)
             
             with col_chart:
+                # Dùng chung kiểu định dạng tiêu đề markdown để ngang hàng tuyệt đối với bảng bên cạnh
+                st.markdown("**HC Trends**")
+                
                 hc_trend = hc_df.groupby('Month')[['Required_HC_Total', 'Actual_HC_Total', 'Approved_HC_Total']].mean().reset_index()
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Approved_HC_Total'], name='Approved HC', line=dict(color='blue')))
                 fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Required_HC_Total'], name='Required HC', line=dict(color='gray')))
                 fig.add_trace(go.Scatter(x=hc_trend['Month'], y=hc_trend['Actual_HC_Total'], name='Actual HC', fill='tonexty', line=dict(color='orange')))
                 
-                # Đồng bộ chiều cao khung Plotly khớp hoàn hảo với khung chứa bảng (375px)
+                # Bỏ title trong Plotly layout vì đã dùng st.markdown phía trên, căn chỉnh lại margin cho khớp
                 fig.update_layout(
-                    title="HC Trends", 
                     height=375, 
-                    margin=dict(l=20, r=20, t=40, b=20), 
+                    margin=dict(l=20, r=20, t=10, b=20), 
                     plot_bgcolor='rgba(0,0,0,0)',
                     paper_bgcolor='rgba(0,0,0,0)'
                 )
@@ -377,7 +378,6 @@ if os.path.exists(file_path):
 
                 styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
                 
-                # Cố định chiều cao bảng bằng đúng chiều cao biểu đồ để hai khung trắng cân bằng tuyệt đối
                 st.dataframe(
                     styled_hc_table, 
                     use_container_width=True,
@@ -389,7 +389,7 @@ if os.path.exists(file_path):
                         )
                     }
                 )
-            # ------------------------------------
+            # ---------------------------------------------
             
             # Bảng CS FTE Table ở phía dưới
             st.subheader("CS FTE Table")
