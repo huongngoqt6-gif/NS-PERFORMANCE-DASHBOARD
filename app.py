@@ -135,7 +135,7 @@ def clean_empty_months(df):
             cols_to_keep.append(m)
     return df[[c for c in df.columns if c in cols_to_keep]]
 
-st.sidebar.title("CSD performance Dashboard")
+st.sidebar.title("CSD Performance")
 file_path = "NTW DATA FOR DASHBOARD.xlsx"
 
 if os.path.exists(file_path):
