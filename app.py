@@ -347,8 +347,60 @@ if os.path.exists(file_path):
             
             st.subheader("CS FTE Table")
             df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
+            
+            # Hàm phân loại Status dựa trên giá trị FTE
+            # LƯU Ý: Giả định dữ liệu Excel của bạn định dạng % là số thập phân (ví dụ: 1.0 = 100%, 0.95 = 95%). 
+            # Nếu dữ liệu thực tế của bạn là số nguyên (ví dụ: 100, 95, 90), hãy đổi các số 1.0, 0.95, 0.9 bên dưới thành 100, 95, 90.
+            def get_fte_status(val):
+                if pd.isna(val) or val == "":
+                    return None
+                if val > 1.0:
+                    return "Overload"
+                elif val > 0.95:
+                    return "High load"
+                elif val >= 0.90:
+                    return "Balanced"
+                else:
+                    return "Less load"
+            
+            # Lấy danh sách các cột tháng đang hiện hữu trong dataframe
+            all_months = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar']
+            month_cols = [c for c in df_csfte.columns if c in all_months]
+            
+            # Tính cột Trung bình FTE (Average FTE) của các tháng (Tự động bỏ qua các ô trống)
+            df_csfte['Average FTE'] = df_csfte[month_cols].mean(axis=1)
+            
+            # Thêm cột Status cho Cột trung bình
+            df_csfte['Average Status'] = df_csfte['Average FTE'].apply(get_fte_status)
+            
+            # Tạo list chứa thứ tự các cột sắp xếp mong muốn (Bắt đầu với Office và CSPIC)
+            ordered_cols = ['Office', 'CSPIC']
+            
+            # Lặp qua từng cột tháng để gán thêm cột Status ngay sau cột tháng đó
+            for m in month_cols:
+                df_csfte[f"{m} Status"] = df_csfte[m].apply(get_fte_status)
+                ordered_cols.extend([m, f"{m} Status"])
+                
+            # Đưa 2 cột trung bình về cuối cùng của bảng
+            ordered_cols.extend(['Average FTE', 'Average Status'])
+            
+            # Cập nhật lại cấu trúc DataFrame theo đúng thứ tự đã sắp xếp
+            df_csfte = df_csfte[ordered_cols]
+            
+            # Đánh lại index bắt đầu từ 1
             df_csfte.index = range(1, len(df_csfte) + 1)
-            st.dataframe(df_csfte, use_container_width=True)
+            
+            # Hiển thị bảng và tùy chọn định dạng số thập phân cho cột Average FTE hiển thị đẹp hơn
+            st.dataframe(
+                df_csfte, 
+                use_container_width=True,
+                column_config={
+                    "Average FTE": st.column_config.NumberColumn(
+                        "Average FTE",
+                        format="%.2f"  # Giới hạn 2 chữ số thập phân cho gọn mắt
+                    )
+                }
+            )
             
         elif page == "BU Allocation":
             st.markdown('<div class="main-title">CSD Operations performance dashboard</div>', unsafe_allow_html=True)
