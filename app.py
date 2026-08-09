@@ -349,8 +349,7 @@ if os.path.exists(file_path):
             df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
             
             # Hàm phân loại Status dựa trên giá trị FTE
-            # LƯU Ý: Giả định dữ liệu Excel của bạn định dạng % là số thập phân (ví dụ: 1.0 = 100%, 0.95 = 95%). 
-            # Nếu dữ liệu thực tế của bạn là số nguyên (ví dụ: 100, 95, 90), hãy đổi các số 1.0, 0.95, 0.9 bên dưới thành 100, 95, 90.
+            # (Lưu ý: 1.0 tương ứng 100%, 0.95 tương ứng 95%, 0.9 tương ứng 90%)
             def get_fte_status(val):
                 if pd.isna(val) or val == "":
                     return None
@@ -367,22 +366,28 @@ if os.path.exists(file_path):
             all_months = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar']
             month_cols = [c for c in df_csfte.columns if c in all_months]
             
-            # Tính cột Trung bình FTE (Average FTE) của các tháng (Tự động bỏ qua các ô trống)
+            # Tính cột Trung bình FTE (Average FTE) của các tháng
             df_csfte['Average FTE'] = df_csfte[month_cols].mean(axis=1)
             
             # Thêm cột Status cho Cột trung bình
             df_csfte['Average Status'] = df_csfte['Average FTE'].apply(get_fte_status)
             
-            # Tạo list chứa thứ tự các cột sắp xếp mong muốn (Bắt đầu với Office và CSPIC)
+            # Tạo list chứa thứ tự các cột sắp xếp mong muốn
             ordered_cols = ['Office', 'CSPIC']
+            
+            # Danh sách để lưu tên các cột Status sẽ được tạo ra (dùng cho việc tô màu)
+            status_cols = []
             
             # Lặp qua từng cột tháng để gán thêm cột Status ngay sau cột tháng đó
             for m in month_cols:
-                df_csfte[f"{m} Status"] = df_csfte[m].apply(get_fte_status)
-                ordered_cols.extend([m, f"{m} Status"])
+                status_col_name = f"{m} Status"
+                df_csfte[status_col_name] = df_csfte[m].apply(get_fte_status)
+                ordered_cols.extend([m, status_col_name])
+                status_cols.append(status_col_name)
                 
             # Đưa 2 cột trung bình về cuối cùng của bảng
             ordered_cols.extend(['Average FTE', 'Average Status'])
+            status_cols.append('Average Status')
             
             # Cập nhật lại cấu trúc DataFrame theo đúng thứ tự đã sắp xếp
             df_csfte = df_csfte[ordered_cols]
@@ -390,14 +395,29 @@ if os.path.exists(file_path):
             # Đánh lại index bắt đầu từ 1
             df_csfte.index = range(1, len(df_csfte) + 1)
             
-            # Hiển thị bảng và tùy chọn định dạng số thập phân cho cột Average FTE hiển thị đẹp hơn
+            # Hàm định dạng màu sắc cho các cột Status
+            def color_status(val):
+                if val == "Overload":
+                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'  # Đỏ nhạt, chữ đỏ đậm
+                elif val == "High load":
+                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'  # Cam nhạt, chữ cam đậm
+                elif val == "Balanced":
+                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'  # Xanh dương nhạt, chữ xanh đậm
+                elif val == "Less load":
+                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'  # Xanh lá nhạt, chữ xanh lá đậm
+                return ''
+
+            # Áp dụng style tô màu chỉ riêng cho các cột Status
+            styled_df = df_csfte.style.map(color_status, subset=status_cols)
+
+            # Hiển thị bảng lên Streamlit Dashboard
             st.dataframe(
-                df_csfte, 
+                styled_df, 
                 use_container_width=True,
                 column_config={
                     "Average FTE": st.column_config.NumberColumn(
                         "Average FTE",
-                        format="%.2f"  # Giới hạn 2 chữ số thập phân cho gọn mắt
+                        format="%.2f"
                     )
                 }
             )
