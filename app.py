@@ -290,7 +290,7 @@ if os.path.exists(file_path):
                 st.dataframe(sv_df, use_container_width=True, hide_index=True)
                 
         elif page == "FTE":
-            st.markdown('<div class="main-title">CSD Operations performance dashboard</div>', unsafe_allow_html=True)
+            st.markdown('<div class="main-title">N-S Operations performance dashboard</div>', unsafe_allow_html=True)
             st.header("FTE")
             
             c1, c2, c3, c4 = st.columns(4)
@@ -345,11 +345,48 @@ if os.path.exists(file_path):
             fig.update_layout(title="HC Trends", plot_bgcolor='rgba(0,0,0,0)')
             st.plotly_chart(fig, use_container_width=True)
             
+            # --- PHẦN BẢNG HC DATA MỚI ĐÍNH KÈM ---
+            st.subheader("HC Performance Data")
+            
+            # Trích xuất các cột cần thiết từ hc_df dựa theo yêu cầu (Office, Month, Total Actual HC, Total Required HC, Capacity_Pct, Capacity_Status)
+            df_hc_table = hc_df[['Office', 'Month', 'Actual_HC_Total', 'Required_HC_Total', 'Capacity_Pct', 'Capacity_Status']].copy()
+            df_hc_table.columns = ['Office', 'Month', 'Total Actual HC', 'Total Required HC', '% Capacity', 'Status']
+            
+            # Hàm tô màu cho cột Status theo đúng logic yêu cầu
+            def color_hc_status(val):
+                if val == "Overload":
+                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'  # Đỏ
+                elif val == "High load":
+                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'  # Cam
+                elif val == "Balanced":
+                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'  # Xanh dương
+                elif val == "Less load":
+                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'  # Xanh lá
+                return ''
+
+            # Áp dụng style màu cho cột Status
+            styled_hc_table = df_hc_table.style.map(color_hc_status, subset=['Status'])
+            
+            # Đánh lại index bắt đầu từ 1 cho bảng
+            df_hc_table.index = range(1, len(df_hc_table) + 1)
+            # Truyền lại index cho styled dataframe
+            styled_hc_table.data.index = df_hc_table.index
+
+            st.dataframe(
+                styled_hc_table, 
+                use_container_width=True,
+                column_config={
+                    "% Capacity": st.column_config.NumberColumn(
+                        "% Capacity",
+                        format="%.1f%%"  # Hiển thị định dạng phần trăm trực quan
+                    )
+                }
+            )
+            # --------------------------------------
+            
             st.subheader("CS FTE Table")
             df_csfte = clean_empty_months(filter_df(data['CSFTE'], has_month=False))
             
-            # Hàm phân loại Status dựa trên giá trị FTE
-            # (Lưu ý: 1.0 tương ứng 100%, 0.95 tương ứng 95%, 0.9 tương ứng 90%)
             def get_fte_status(val):
                 if pd.isna(val) or val == "":
                     return None
@@ -362,55 +399,40 @@ if os.path.exists(file_path):
                 else:
                     return "Less load"
             
-            # Lấy danh sách các cột tháng đang hiện hữu trong dataframe
             all_months = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar']
             month_cols = [c for c in df_csfte.columns if c in all_months]
             
-            # Tính cột Trung bình FTE (Average FTE) của các tháng
             df_csfte['Average FTE'] = df_csfte[month_cols].mean(axis=1)
-            
-            # Thêm cột Status cho Cột trung bình
             df_csfte['Average Status'] = df_csfte['Average FTE'].apply(get_fte_status)
             
-            # Tạo list chứa thứ tự các cột sắp xếp mong muốn
             ordered_cols = ['Office', 'CSPIC']
-            
-            # Danh sách để lưu tên các cột Status sẽ được tạo ra (dùng cho việc tô màu)
             status_cols = []
             
-            # Lặp qua từng cột tháng để gán thêm cột Status ngay sau cột tháng đó
             for m in month_cols:
                 status_col_name = f"{m} Status"
                 df_csfte[status_col_name] = df_csfte[m].apply(get_fte_status)
                 ordered_cols.extend([m, status_col_name])
                 status_cols.append(status_col_name)
                 
-            # Đưa 2 cột trung bình về cuối cùng của bảng
             ordered_cols.extend(['Average FTE', 'Average Status'])
             status_cols.append('Average Status')
             
-            # Cập nhật lại cấu trúc DataFrame theo đúng thứ tự đã sắp xếp
             df_csfte = df_csfte[ordered_cols]
-            
-            # Đánh lại index bắt đầu từ 1
             df_csfte.index = range(1, len(df_csfte) + 1)
             
-            # Hàm định dạng màu sắc cho các cột Status
             def color_status(val):
                 if val == "Overload":
-                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'  # Đỏ nhạt, chữ đỏ đậm
+                    return 'background-color: #ffcccc; color: #cc0000; font-weight: bold;'
                 elif val == "High load":
-                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'  # Cam nhạt, chữ cam đậm
+                    return 'background-color: #ffe6cc; color: #cc6600; font-weight: bold;'
                 elif val == "Balanced":
-                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'  # Xanh dương nhạt, chữ xanh đậm
+                    return 'background-color: #cce6ff; color: #0066cc; font-weight: bold;'
                 elif val == "Less load":
-                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'  # Xanh lá nhạt, chữ xanh lá đậm
+                    return 'background-color: #d9ffcc; color: #2e8b57; font-weight: bold;'
                 return ''
 
-            # Áp dụng style tô màu chỉ riêng cho các cột Status
             styled_df = df_csfte.style.map(color_status, subset=status_cols)
 
-            # Hiển thị bảng lên Streamlit Dashboard
             st.dataframe(
                 styled_df, 
                 use_container_width=True,
