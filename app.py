@@ -16,35 +16,73 @@ PASSWORD = "123456"  # Thay mật khẩu của bạn vào trong dấu nháy kép
 if "authenticated" not in st.session_state:
   st.session_state["authenticated"] = False
 
-
 # Hàm kiểm tra mật khẩu
 def check_password():
-  if st.session_state["password_input"] == PASSWORD:
+  if st.session_state.get("password_input", "") == PASSWORD:
     st.session_state["authenticated"] = True
-    st.success("Đăng nhập thành công!")
   else:
     st.session_state["authenticated"] = False
     st.error("Mật khẩu không đúng. Vui lòng thử lại!")
 
 
-# Nếu chưa đăng nhập, hiển thị màn hình nhập mật khẩu
+# =====================================================================
+# TRANG COVER (HIỂN THỊ KHI CHƯA ĐĂNG NHẬP)
+# =====================================================================
 if not st.session_state["authenticated"]:
+  # CSS riêng cho trang cover để tạo khoảng cách và giao diện sang trọng
   st.markdown(
-      "<h2 style='text-align: center; color: white;'>Vui lòng nhập mật khẩu"
-      " để xem Dashboard</h2>",
+      """
+    <style>
+        .stApp {
+            background-color: #607D8B !important;
+        }
+        .cover-title {
+            color: white;
+            font-size: 42px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .cover-subtitle {
+            color: #dcdde1;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .cover-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+    """,
       unsafe_allow_html=True,
   )
 
-  # Căn giữa khung nhập mật khẩu cho đẹp mắt
-  col1, col2, col3 = st.columns([1, 2, 1])
+  # Tạo khoảng trống phía trên cho cân đối màn hình
+  st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+  col1, col2, col3 = st.columns([1, 1.2, 1])
   with col2:
-    st.text_input(
-        "Mật khẩu",
-        type="password",
-        key="password_input",
-        on_change=check_password,
+    st.markdown(
+        '<div class="cover-title">Welcome to CSD Dashboard</div>',
+        unsafe_allow_html=True,
     )
-    st.button("Đăng nhập", on_click=check_password)
+    st.markdown(
+        '<div class="cover-subtitle">Vui lòng nhập mật khẩu để tiếp tục</div>',
+        unsafe_allow_html=True,
+    )
+
+    with st.container():
+      st.text_input(
+          "Mật khẩu bảo mật",
+          type="password",
+          key="password_input",
+          placeholder="Nhập mật khẩu...",
+      )
+      st.button("Đăng nhập", on_click=check_password, use_container_width=True)
 
   # Dừng code tại đây, không cho hiển thị phần dashboard bên dưới nếu chưa đăng nhập
   st.stop()
@@ -53,7 +91,7 @@ if not st.session_state["authenticated"]:
 # NẾU ĐÃ ĐĂNG NHẬP THÀNH CÔNG, CODE DASHBOARD SẼ CHẠY BÊN DƯỚI NÀY
 # =====================================================================
 
-# CSS Styling để tùy biến st.metric thành các card nền trắng, bo viền, căn giữa, chữ xám, số cam
+# CSS Styling cho Dashboard chính
 st.markdown(
     """
 <style>
@@ -696,7 +734,6 @@ if os.path.exists(file_path):
       col_chart, col_table = st.columns(2)
 
       with col_chart:
-        # Dùng chung kiểu định dạng tiêu đề markdown để ngang hàng tuyệt đối với bảng bên cạnh
         st.markdown("**HC Trends**")
 
         hc_trend = (
@@ -733,7 +770,6 @@ if os.path.exists(file_path):
             )
         )
 
-        # Bỏ title trong Plotly layout vì đã dùng st.markdown phía trên, căn chỉnh lại margin cho khớp
         fig.update_layout(
             height=375,
             margin=dict(l=20, r=20, t=10, b=20),
@@ -802,7 +838,6 @@ if os.path.exists(file_path):
                 )
             },
         )
-      # ---------------------------------------------
 
       # Bảng CS FTE Table ở phía dưới
       st.subheader("CS FTE Table")
