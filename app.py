@@ -1,15 +1,61 @@
+import os
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import numpy as np
-import os
 import streamlit as st
 
 # Config page
 st.set_page_config(page_title="CSD Performance", layout="wide")
 
+# ==================== ĐẶT MẬT KHẨU TẠI ĐÂY ====================
+PASSWORD = "123456"  # Thay mật khẩu của bạn vào trong dấu nháy kép này
+# ============================================================
+
+# Khởi tạo trạng thái đăng nhập trong st.session_state
+if "authenticated" not in st.session_state:
+  st.session_state["authenticated"] = False
+
+
+# Hàm kiểm tra mật khẩu
+def check_password():
+  if st.session_state["password_input"] == PASSWORD:
+    st.session_state["authenticated"] = True
+    st.success("Đăng nhập thành công!")
+  else:
+    st.session_state["authenticated"] = False
+    st.error("Mật khẩu không đúng. Vui lòng thử lại!")
+
+
+# Nếu chưa đăng nhập, hiển thị màn hình nhập mật khẩu
+if not st.session_state["authenticated"]:
+  st.markdown(
+      "<h2 style='text-align: center; color: white;'>Vui lòng nhập mật khẩu"
+      " để xem Dashboard</h2>",
+      unsafe_allow_html=True,
+  )
+
+  # Căn giữa khung nhập mật khẩu cho đẹp mắt
+  col1, col2, col3 = st.columns([1, 2, 1])
+  with col2:
+    st.text_input(
+        "Mật khẩu",
+        type="password",
+        key="password_input",
+        on_change=check_password,
+    )
+    st.button("Đăng nhập", on_click=check_password)
+
+  # Dừng code tại đây, không cho hiển thị phần dashboard bên dưới nếu chưa đăng nhập
+  st.stop()
+
+# =====================================================================
+# NẾU ĐÃ ĐĂNG NHẬP THÀNH CÔNG, CODE DASHBOARD SẼ CHẠY BÊN DƯỚI NÀY
+# =====================================================================
+
 # CSS Styling để tùy biến st.metric thành các card nền trắng, bo viền, căn giữa, chữ xám, số cam
-st.markdown('''
+st.markdown(
+    """
 <style>
     .stApp {
         background-color: #607D8B !important;
